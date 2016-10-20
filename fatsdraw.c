@@ -10,7 +10,7 @@
 #include <stdbool.h>
 /* XDCtools Header files */
 #include <xdc/std.h>
-#include <xdc/runtime/System.h>
+//#include <xdc/runtime/System.h>
 /* BIOS Header files */
 #include <ti/sysbios/BIOS.h>
 #include <ti/sysbios/knl/Clock.h>
@@ -29,8 +29,33 @@
 
 #include "hp_time_po.h"
 
+#include "logger.h"
+
 #define WriteSD_TASKSTACKSIZE    2048
 #define Uart_TASKSTACKSIZE       3076
+
+
+//------------------------------------------------------------------
+int Logger_status = 0;
+//----   0   開機上電後            閃紅燈   右 -- LED1
+//----   1    GPS訊號對時完成  閃綠燈   右 -- LED2
+
+//------ 0與1的時候一樣會輸出即時訊號  可檢查波形----需30分內完成----
+
+//----   2   啟動紀錄模式         閃紅燈   左 -- LED0
+
+
+//----   3   停止紀錄與GPS校時完成  全亮
+
+//--------    異常出現 閃藍燈 ---LED3  --- 次數為出現異常的點
+int error_code = 0;
+//--------
+//--------
+
+
+
+
+
 
 Task_Struct WriteSD_taskStruct;
 Task_Struct Uart_taskStruct;
@@ -132,6 +157,8 @@ hptime_t Get_Logger_Time(){
 //---   FatFs Task
 Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
 {
+
+
     FRESULT fresult;
     SDSPI_Handle sdspiHandle;
     SDSPI_Params sdspiParams;
@@ -140,10 +167,10 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
     SDSPI_Params_init(&sdspiParams);	 /* Mount and register the SD Card */
     sdspiHandle = SDSPI_open(Board_SDSPI0, DRIVE_NUM, &sdspiParams);
     if (sdspiHandle == NULL) {
-        System_abort("Error starting the SD card\n");
+       // System_abort("Error starting the SD card\n");
     }
     else {
-        System_printf("Drive %u is mounted\n", DRIVE_NUM);
+       // System_printf("Drive %u is mounted\n", DRIVE_NUM);
     }
 
     int data_counter = 0;
@@ -193,13 +220,13 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
         		/* Reset the internal file pointer */	//		f_lseek(&src, 0);
            	}
            	else {
-           		System_printf("Using existing copy of \"%s\"\n", inputfile);
+           	  //	System_printf("Using existing copy of \"%s\"\n", inputfile);
            	}
 
         }
 
     SDSPI_close(sdspiHandle);    /* Stopping the SDCard */
-    System_printf("Drive %u unmounted\n", DRIVE_NUM);
+   // System_printf("Drive %u unmounted\n", DRIVE_NUM);
 
     //BIOS_exit(0);
 }
@@ -274,7 +301,7 @@ void hwi_GetADS1281Data_Fxn(unsigned int index)
     	  memcpy(textarray,data_buffer,DATA_BUF_SIZE);
     	  adc_counter = 0;
     	  databuuer_is_Full = 1;
-    	  GPIO_toggle(Board_LED3);
+    	  //GPIO_toggle(Board_LED3);
        }
 
     //   GPIO_toggle(Board_LED1);
@@ -293,6 +320,31 @@ void hwi_GetSEAScanPPS_Fxn(unsigned int index){
 	outPUT_mms = 1;
 
 	seaScan_PPS_ticks = curValue ;
+
+
+	switch(Logger_status){
+			case 0:
+				GPIO_toggle(Board_LED1);
+			break;
+			case 1:
+				GPIO_toggle(Board_LED2);
+			break;
+			case 2:
+				GPIO_toggle(Board_LED0);
+			break;
+			case 3:
+				GPIO_write(Board_LED0, Board_LED_ON);
+				GPIO_write(Board_LED1, Board_LED_ON);
+				GPIO_write(Board_LED2, Board_LED_ON);
+				GPIO_write(Board_LED3, Board_LED_ON);
+			break;
+	}
+
+
+
+
+
+
 }
 
 void hwi_GetGPS_PPS_Fxn(unsigned int index){
@@ -339,7 +391,7 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
     uartParams.baudRate = 115200;
     uartParams.readTimeout = 10;
     uart = UART_open(Board_UART0, &uartParams);  //-- P1.2 P1.3   Board_UART1 = P3.2 P3.3
-    if (uart == NULL)System_abort("Error opening the UART 0");
+   // if (uart == NULL)System_abort("Error opening the UART 0");
 
     int print_i;
 
@@ -354,7 +406,7 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
     uartParams2.baudRate = 9600;
     uartParams2.readTimeout = 10;
     uart2 = UART_open(Board_UART1, &uartParams2);  //-- P1.2 P1.3   Board_UART1 = P3.2 P3.3
-    if (uart2 == NULL)System_abort("Error opening the UART 1");
+   // if (uart2 == NULL)System_abort("Error opening the UART 1");
 
 
 
@@ -363,7 +415,6 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 	 Task_sleep((UInt)arg0);
 	 if(outPUT_mms==1){
 		 outPUT_mms = 0;
-		// GPIO_toggle(Board_LED0);
 
 		 if(GPS_sig ==1){
 			 //sprintf(printbuffer,"GPS = %s , %s ,%s ,%lld, %lld \r\n", Gps_Date,Gps_Time,Gps_Staus,gps_time/100,gps_time2/100);
@@ -427,9 +478,8 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
             		   	GPS_Time_String[15] = Gps_Time[3];
             		   	GPS_Time_String[17] = Gps_Time[4];
             		   	GPS_Time_String[18] = Gps_Time[5];
-            		   	GPIO_write(Board_LED1, Board_LED_ON);
+
             		   	gps_time2 = ms_timestr2hptime(GPS_Time_String);
-            		   	GPIO_write(Board_LED1, Board_LED_OFF);
 
             		   	first_GPS_string = 1;
 
@@ -500,7 +550,7 @@ int main(void)
     GPIO_write(Board_LED0, Board_LED_OFF); //- RED SD too slow
     GPIO_write(Board_LED2, Board_LED_OFF); //- Green SD card
 
-    System_printf("Starting the FatSD Raw example\n");
+    //System_printf("Starting the FatSD Raw example\n");
 
 
 

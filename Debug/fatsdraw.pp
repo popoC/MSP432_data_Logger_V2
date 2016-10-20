@@ -14,12 +14,19 @@ fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/t
 fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/targets/arm/elf/M4F.h
 fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/targets/std.h
 fatsdraw.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.3.0.STS/include/stdint.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/System.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/xdc.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types__prologue.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/package.defs.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types__epilogue.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__prologue.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/package.defs.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error__prologue.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Main.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
@@ -29,11 +36,16 @@ fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error__prologue.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Main.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Memory.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/Memory_HeapProxy.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
@@ -45,16 +57,19 @@ fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error__epilogue.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Memory.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/Memory_HeapProxy.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__epilogue.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/Clock.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
+fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
+fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/package/package.defs.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert__prologue.h
@@ -71,38 +86,6 @@ fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert__epilogue.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/ISystemSupport.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_SupportProxy.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/ISystemSupport.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_Module_GateProxy.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_SupportProxy.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_Module_GateProxy.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__prologue.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/package.defs.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__epilogue.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/Clock.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h
-fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/package/package.defs.h
-fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Log.h
 fatsdraw.obj: C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h
@@ -215,6 +198,7 @@ fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/msp432_driverlib_3_10_00_0
 fatsdraw.obj: C:/ti/tirtos_msp43x_2_16_01_14/products/msp432_driverlib_3_10_00_09/driverlib/MSP432P4xx/wdt_a.h
 fatsdraw.obj: ../hp_time_po.h
 fatsdraw.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.3.0.STS/include/time.h
+fatsdraw.obj: ../logger.h
 
 ../fatsdraw.c: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.3.0.STS/include/stdio.h: 
@@ -230,12 +214,19 @@ C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/targets/arm/
 C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/targets/arm/elf/M4F.h: 
 C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/targets/std.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.3.0.STS/include/stdint.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/System.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/xdc.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types__prologue.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/package.defs.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types__epilogue.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__prologue.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/package.defs.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error__prologue.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Main.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
@@ -245,11 +236,16 @@ C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h:
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error__prologue.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Main.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Memory.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/Memory_HeapProxy.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
@@ -261,16 +257,19 @@ C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h:
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error__epilogue.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Memory.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/Memory_HeapProxy.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IHeap.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__epilogue.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/Clock.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
+C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
+C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/package/package.defs.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert__prologue.h: 
@@ -287,38 +286,6 @@ C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h:
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert__epilogue.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/ISystemSupport.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_SupportProxy.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/ISystemSupport.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_Module_GateProxy.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_SupportProxy.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/package/System_Module_GateProxy.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__prologue.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/package.defs.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Error.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IModule.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IGateProvider.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/BIOS__epilogue.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/package/BIOS_RtsGateProxy.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/Clock.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/IInstance.h: 
-C:/ti/tirtos_msp43x_2_16_01_14/products/bios_6_45_02_31/packages/ti/sysbios/knl/package/package.defs.h: 
-C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Assert.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Diags.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Log.h: 
 C:/ti/xdctools_3_32_00_06_core/packages/xdc/runtime/Types.h: 
@@ -431,3 +398,4 @@ C:/ti/tirtos_msp43x_2_16_01_14/products/msp432_driverlib_3_10_00_09/driverlib/MS
 C:/ti/tirtos_msp43x_2_16_01_14/products/msp432_driverlib_3_10_00_09/driverlib/MSP432P4xx/wdt_a.h: 
 ../hp_time_po.h: 
 C:/ti/ccsv6/tools/compiler/ti-cgt-arm_16.3.0.STS/include/time.h: 
+../logger.h: 

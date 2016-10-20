@@ -17,8 +17,8 @@ struct time_drift{
 
 typedef struct Logger{
 				int status;  // 0 view mode, 1 Rec mode
-				time_drift start_dirft;
-				time_drift end_dirft;
+				struct time_drift start_dirft;
+				struct time_drift end_dirft;
 				signed long long NOW_Time;
 				int data_is_full;
 
