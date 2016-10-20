@@ -1,9 +1,7 @@
 /*
  * Copyright (c) 2015, Texas Instruments Incorporated
  * All rights reserved.
- *
- *
- *  2016..10 18
+ *  2016..10 20
  */
 /* *  ======== fatsdraw.c ======== */
 #include <stdio.h>
@@ -119,9 +117,7 @@ hptime_t Get_Logger_Time(){
 	time_drift =	time_drift	/ one_sec_ticks;
 	time_drift = time_drift *1000000;
 
-
 //	time_drift = Clock_getTicks() - seaScan_PPS_ticks;
-
 //	time_drift = time_drift*100;
 
 	now_t = NOW_Time +(long int)time_drift;			  //  0.1ms  (0-10000)
