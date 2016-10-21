@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
- * All rights reserved.
+ * Copyright (c) 2015, Texas Instruments Incorporated  All rights reserved.
  *  2016..10 21
  */
 /* *  ======== fatsdraw.c ======== */
@@ -40,18 +39,17 @@ int Logger_status = 0;
 //----   0   開機上電後            閃紅燈   右 -- LED1
 //----   1    GPS訊號對時完成  閃綠燈   右 -- LED2
 
-//------ 0與1的時候一樣會輸出即時訊號  可檢查波形----需30分內完成----
-
+//******------ 0與1的時候一樣會輸出即時訊號  可檢查波形----需30分內完成----
 //----   2   啟動紀錄模式         閃紅燈   左 -- LED0
-
-
 //----   3   停止紀錄與GPS校時完成  全亮
 
 //--------    異常出現 閃藍燈 ---LED3  --- 次數為出現異常的點
-int error_code = 0;
-//--------
-//--------
+//--------    GPS對時以出現5次正確訊號後才開始動作---檢查GPRMC內的"A"連續出現5次
 
+int error_code = 0;
+//-------- 1      UART 初始化異常
+//-------- 2      SD卡  初始化異常
+//-------- 3      寫入速度太慢
 
 
 
@@ -77,10 +75,7 @@ unsigned char ahex2bin (unsigned char MSB, unsigned char LSB);
 signed long long NOW_Time = 1451606400000000; // 2016/01/01/ 0:00:00.00
 
 volatile uint32_t curValue;
-
 volatile uint32_t seaScan_PPS_ticks;
-
-
 
 volatile int32_t one_sec_ticks;
 
@@ -95,13 +90,13 @@ float print_ads1281_value[4];
 float ads1281_value = 0;
 
 int get_print = 0;
-//-----ADS1281----------------------
+//-------------------------------------
 
+//-----fatfs----------------------------------------------------------------------------
 /* Drive number used for FatFs */
 #define DRIVE_NUM           0
 //#define DATA_BUF_SIZE       300*4 // 4CH
 #define DATA_BUF_SIZE       1200*3 //3Byte*4CH *100Hz =1200 /=/1sec data,
-
 
 char  inputfile[30];
 
@@ -110,7 +105,6 @@ hptime_t fatfs_write_Time = 0;
 //-  adc 1sec = 100 sample * 3Byte = 300Bytes
 
 FIL src;
-
 int fileSize = 60/10; //--- 60 sec 1 file
 int adc_counter = 0;
 
@@ -119,11 +113,11 @@ int databuuer_is_Full = 0;
 
 char textarray[DATA_BUF_SIZE];
 char data_buffer[DATA_BUF_SIZE];
-
-
-//-------------- Get Time
+//----------------------------------------------------------------------------------------
+//-------------- Get Time------- GPS
 int first_GPS_string = 0;
-int first_GPS_pps = 0;
+int checkGps = 0;
+//int checkGps = 0;
 
 
 hptime_t gps_time = 0;
@@ -133,7 +127,9 @@ hptime_t time_offset_first;
 
 char GPS_Time_String[]  = "2000/01/01 00:00:00.000000";
 
+GPS_DATA Garmin_01;
 
+//----------------------------------------------------------------------------------------
 hptime_t Get_Logger_Time(){
 	hptime_t now_t;
 	float time_drift;
@@ -154,23 +150,17 @@ hptime_t Get_Logger_Time(){
 }
 
 
-//---   FatFs Task
+//---   FatFs Task//----------------------------------------------------------------------------------------
 Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
 {
-
-
     FRESULT fresult;
     SDSPI_Handle sdspiHandle;
     SDSPI_Params sdspiParams;
-    unsigned int bytesWritten = 0;       /* Variables to keep track of the file copy progress */
-
+    unsigned int bytesWritten = 0;            /* Variables to keep track of the file copy progress */
     SDSPI_Params_init(&sdspiParams);	 /* Mount and register the SD Card */
     sdspiHandle = SDSPI_open(Board_SDSPI0, DRIVE_NUM, &sdspiParams);
     if (sdspiHandle == NULL) {
-       // System_abort("Error starting the SD card\n");
-    }
-    else {
-       // System_printf("Drive %u is mounted\n", DRIVE_NUM);
+    	error_code = 5;
     }
 
     int data_counter = 0;
@@ -181,6 +171,9 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
     		 Task_sleep((UInt)arg0);
     	}
 
+
+
+
         while(start_loggering){
        		/* Open file for writing */
     	    sprintf(inputfile,"%05ld.vvt",file_sn);
@@ -189,8 +182,6 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
     	    f_sync(&src);
 
     	    fatfs_write_Time = Get_Logger_Time();
-
-
 
     	    if (fresult == FR_OK) {
     	    	f_write(&src, &fatfs_write_Time, 8, &bytesWritten);
@@ -204,14 +195,14 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
 
 
 
-           			GPIO_write(Board_LED2, Board_LED_ON);
+           		//	GPIO_write(Board_LED2, Board_LED_ON);
 
            			f_write(&src, textarray, DATA_BUF_SIZE, &bytesWritten);
 
 
            			databuuer_is_Full = 0;
 
-           			GPIO_write(Board_LED2, Board_LED_OFF);
+           	//		GPIO_write(Board_LED2, Board_LED_OFF);
            		}
 
            		f_sync(&src);
@@ -226,44 +217,37 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
         }
 
     SDSPI_close(sdspiHandle);    /* Stopping the SDCard */
-   // System_printf("Drive %u unmounted\n", DRIVE_NUM);
+    error_code = 8;
+
 
     //BIOS_exit(0);
 }
 
-
-
-
+//----------------------------------------------------------------------------------------
 int avg_c = 0;
-int delay_c = 20;
-
 void hwi_GetADS1281Data_Fxn(unsigned int index)
 {
 	int i;
     /* Clear the GPIO interrupt and toggle an LED */
 	avg_c++;
-
 	if(avg_c==5){   //--  data rate = 500 Hz
-
-		//GPIO_toggle(Board_LED1);
+		//-- 這裡有個方法可以試試----   降解析求平均---->反正不會達到32bit 所以可以-->  a += data >> 2  -->   5次後-> a = (a/5 ) << 2
+		//-- 先筆記以後再試吧~~~
 
 		ads1281_data1 = 0;		ads1281_data2 = 0;		ads1281_data3 = 0;		ads1281_data4 = 0;
 		avg_c = 0;
-
 		for(i=0;i<32;i++){
-			//-- DRDY->SYNC min 100ns-------
-			// -- min = 24/fclk == 0.000006 s
+			//-- DRDY->SYNC min 100ns------- 			// -- min = 24/fclk == 0.000006 s
 			GPIO_write(Board_ADS1281_SCLK, 1);
-
 			ads1281_data3 = (ads1281_data3<<1) | (GPIO_read(Board_ADS1281_DOUT3));
 			ads1281_data4 = (ads1281_data4<<1) | (GPIO_read(Board_ADS1281_DOUT4));
 			ads1281_data1 = (ads1281_data1<<1) | (GPIO_read(Board_ADS1281_DOUT1));
 			ads1281_data2 = (ads1281_data2<<1) | (GPIO_read(Board_ADS1281_DOUT2));
-		//	while(delay_c!=0){				delay_c--;			}
-
+		    //	while(delay_c!=0){				delay_c--;			}
 			GPIO_write(Board_ADS1281_SCLK, 0);
-
 		}
+
+		//-- 這邊可以資料後處理---
 
 		(ads1281_data1 > 0x7fffffff) ? (ads1281_data1 = ads1281_data1 - 0x80000000) :(ads1281_data1 = ads1281_data1 + 0x80000000);
 		(ads1281_data2 > 0x7fffffff) ? (ads1281_data2 = ads1281_data2 - 0x80000000) :(ads1281_data2 = ads1281_data2 + 0x80000000);
@@ -295,22 +279,18 @@ void hwi_GetADS1281Data_Fxn(unsigned int index)
 		data_buffer[adc_counter+11] = (ads1281_data4 >> 8 ) & 0xff ;
 		adc_counter+=12;
 
-       if(adc_counter==DATA_BUF_SIZE){
-
-    	  //if(databuuer_is_Full==1)GPIO_write(Board_LED0, Board_LED_ON);
-    	  memcpy(textarray,data_buffer,DATA_BUF_SIZE);
-    	  adc_counter = 0;
-    	  databuuer_is_Full = 1;
-    	  //GPIO_toggle(Board_LED3);
+       if(adc_counter==DATA_BUF_SIZE){     //--  暫存已滿-->搬到SD內吧
+    	    if(databuuer_is_Full==1){    	    	error_code = 3;    	    }
+    	    memcpy(textarray,data_buffer,DATA_BUF_SIZE);
+    	    adc_counter = 0;
+    	    if(start_loggering)databuuer_is_Full = 1;
        }
 
-    //   GPIO_toggle(Board_LED1);
 	}
    // ads1281_value = 0;
 }
 
-
-
+//----------------------------------------------------------------------------------------
 void hwi_GetSEAScanPPS_Fxn(unsigned int index){
 	NOW_Time = NOW_Time+1000000;
 	curValue = Clock_getTicks();  //-- 0.1ms ?
@@ -339,36 +319,37 @@ void hwi_GetSEAScanPPS_Fxn(unsigned int index){
 				GPIO_write(Board_LED3, Board_LED_ON);
 			break;
 	}
-
+	switch(error_code){
+			case 3:
+				GPIO_toggle(Board_LED3);
+			break;
+			case 7:
+				GPIO_toggle(Board_LED0);
+			break;
+	}
 
 
 
 
 
 }
-
+//----------------------------------------------------------------------------------------
 void hwi_GetGPS_PPS_Fxn(unsigned int index){
 
 	gps_time = Get_Logger_Time();
-	//gps_time = ms_timestr2hptime(GPS_Time_String);
-	//GPIO_toggle(Board_LED0);
+	//gps_time = ms_timestr2hptime(GPS_Time_String);	//GPIO_toggle(Board_LED0);
 
 	time_offset_now = gps_time - gps_time2;
 
-
 	if(first_GPS_string==1){
-
 		time_offset_first = gps_time - gps_time2;
 		NOW_Time = gps_time2;
 		first_GPS_string = 2;  //--  校正完成
 
 	}
-
-
 }
-
+//----------------------------------------------------------------------------------------
 void task_Uart_Fxn(UArg arg0, UArg arg1){
-
 	char input;
 	static char uart_rx_buf[100];
 	static uint8_t uart_rx_buf_counter = 0;
@@ -377,8 +358,6 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 
     char Gps_Date[6];    char Gps_Time[6];    char Gps_Staus[3];
 
-
-    static int GPS_sig = 0;
 
     UART_Handle uart;
     UART_Params uartParams;
@@ -410,19 +389,21 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 
 
 
-
 	while(1){
 	 Task_sleep((UInt)arg0);
 	 if(outPUT_mms==1){
 		 outPUT_mms = 0;
 
-		 if(GPS_sig ==1){
+		 if(Garmin_01.status ==1){
 			 //sprintf(printbuffer,"GPS = %s , %s ,%s ,%lld, %lld \r\n", Gps_Date,Gps_Time,Gps_Staus,gps_time/100,gps_time2/100);
-			 sprintf(printbuffer,"GPS = %s , %s ,%s ,%lld, %lld, %lld \r\n", Gps_Date,Gps_Time,Gps_Staus,gps_time/100,gps_time2/100,time_offset_now);
-			 GPS_sig = 0;
+			 sprintf(printbuffer,"GPS = %s , %s ,%lld, %lld, %lld , %d \r\n", Gps_Date,Gps_Time,gps_time/100,gps_time2/100,time_offset_now,Garmin_01.gps_right_time);
+			 Garmin_01.status = 0;
 		 }
 		 else{
-			 sprintf(printbuffer,"GPS_sig = 0, err  = %lld \r\n", Get_Logger_Time());
+			 sprintf(printbuffer,"Garmin_01.status = 0, err  = %lld    , %d \r\n", Get_Logger_Time(),Garmin_01.gps_right_time);
+			 Garmin_01.gps_right_time--;
+		    if(Garmin_01.gps_right_time<-3)Garmin_01.gps_right_time=0;
+
 		 }
 		 UART_write(uart, &printbuffer, strlen(printbuffer));
 
@@ -435,11 +416,16 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 		     sprintf(printbuffer,"%9.7f %9.7f %9.7f %9.7f \r\n", print_ads1281_value[0],print_ads1281_value[1],print_ads1281_value[2],print_ads1281_value[3]);
 	 	 //	 sprintf(printbuffer,"%8.5f %lu  \r\n", print_ads1281_value[0],print_ads1281_data[0]);
    // 	     UART_write(uart, &printbuffer, strlen(printbuffer));
-		}
-	 }
-
-
-
+		  }
+	   }
+	   if(UART_read(uart, &input, 1)>0){
+	        if( input  == 's'){
+	        		GPIO_write(Board_LED0, Board_LED_ON);
+	        }
+	        if( input  == 'e'){
+	        		GPIO_write(Board_LED0, Board_LED_OFF);
+	        }
+	   }
 
 	   if(UART_read(uart2, &input, 1)>0){
 
@@ -448,58 +434,43 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 
        	if(uart_rx_buf[uart_rx_buf_counter-1] == '\n'){
                if(strncmp("$GPRMC",uart_rx_buf,6)==0){
-
-          //  	   sprintf(printbuffer,"%s",uart_rx_buf);
-           // 	   UART_write(uart, &printbuffer, strlen(printbuffer));
-               	   //check sum ---
-            	   checksum = 0;
-                   for(ck=1;ck<uart_rx_buf_counter-5;ck++){
-                     checksum ^= uart_rx_buf[ck];
-                   }
+            	   //  	   sprintf(printbuffer,"%s",uart_rx_buf);           // 	   UART_write(uart, &printbuffer, strlen(printbuffer));
+            	   	   checksum = 0;//check sum ---
+            	   	   for(ck=1;ck<uart_rx_buf_counter-5;ck++){                     checksum ^= uart_rx_buf[ck];                   }
                    if(checksum == ahex2bin(uart_rx_buf[uart_rx_buf_counter-4],uart_rx_buf[uart_rx_buf_counter-3])){
-
                 	   sscanf(uart_rx_buf,"$GPRMC,%[^,],%[^,],%*[^,],%*[^,],%*[^,],%*[^,],%*[^,],%*[^,],%[^,]",Gps_Time,Gps_Staus,Gps_Date);//--  %[^,] 可用來分割,內的字元
-
             	   	   if(Gps_Staus[0]=='A'){
-            		   	   Gps_Staus[0]='N';
-            		   	   GPIO_toggle(Board_LED0);
-            		   	GPS_sig = 1;
-            		   	//char GPS_Time_String[]  = "2000/01/01 00:00:00.000000";
+            	   		   Gps_Staus[0]='N';
+            		   	   //   GPIO_toggle(Board_LED0);
+            	   		   	   Garmin_01.status = 1;
+            	   		   	   //char GPS_Time_String[]  = "2000/01/01 00:00:00.000000";
+            	   		   	   GPS_Time_String[2] = Gps_Date[4];            	   		   	   GPS_Time_String[3] = Gps_Date[5];
+            	   		   	   GPS_Time_String[5] = Gps_Date[2];            	   		   	   GPS_Time_String[6] = Gps_Date[3];
+            	   		   	   GPS_Time_String[8] = Gps_Date[0];            	   		   	   GPS_Time_String[9] = Gps_Date[1];
+            	   		   	   GPS_Time_String[11] = Gps_Time[0];            	   		   	   GPS_Time_String[12] = Gps_Time[1];
+            	   		   	   GPS_Time_String[14] = Gps_Time[2];            	   		   	   GPS_Time_String[15] = Gps_Time[3];
+            	   		   	   GPS_Time_String[17] = Gps_Time[4];            	   		   	   GPS_Time_String[18] = Gps_Time[5];
 
-            		   	GPS_Time_String[2] = Gps_Date[4];
-            		   	GPS_Time_String[3] = Gps_Date[5];
-            		   	GPS_Time_String[5] = Gps_Date[2];
-            		   	GPS_Time_String[6] = Gps_Date[3];
-            		   	GPS_Time_String[8] = Gps_Date[0];
-            		   	GPS_Time_String[9] = Gps_Date[1];
-            		   	GPS_Time_String[11] = Gps_Time[0];
-            		   	GPS_Time_String[12] = Gps_Time[1];
-            		   	GPS_Time_String[14] = Gps_Time[2];
-            		   	GPS_Time_String[15] = Gps_Time[3];
-            		   	GPS_Time_String[17] = Gps_Time[4];
-            		   	GPS_Time_String[18] = Gps_Time[5];
+            	   		   	   	   gps_time2 = ms_timestr2hptime(GPS_Time_String);
 
-            		   	gps_time2 = ms_timestr2hptime(GPS_Time_String);
+            	   		   	   	   Garmin_01.gps_right_time++;
 
-            		   	first_GPS_string = 1;
-
-
-            	   	   }
-
-                   }
-               }
-               //--這裡可以增加不同面令間的使用
-               //
-               memset(uart_rx_buf,0,uart_rx_buf_counter+1);
-       		uart_rx_buf_counter = 0;
-       	}
-       	else if(uart_rx_buf_counter>98){
+            	   		   	   	   if(Garmin_01.gps_right_time>5){
+            	   		   	   		   	   Garmin_01.gps_right_time = 1;
+            	   		   	   		   	   first_GPS_string = 1;
+            	   		   	   	   }
+            	   	   	   }
+                   	   }
+               	   }  //if(strncmp("$GPRMC",uart_rx_buf,6)==0){
+               	   	   //--這裡可以增加不同面令間的使用
+               	   	   //
+               	   memset(uart_rx_buf,0,uart_rx_buf_counter+1);
+               	   uart_rx_buf_counter = 0;
+       		}
+       		else if(uart_rx_buf_counter>98){
             memset(uart_rx_buf,0,uart_rx_buf_counter+1);
     		uart_rx_buf_counter = 0;
-       	}
-
-
-
+       		}
 
 	   }
 
@@ -512,12 +483,14 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
  */
 int main(void)
 {
-  /* Construct BIOS Objects */
-  //  Clock_Params clkParams;
+	Garmin_01.checkGps = 0;
+	Garmin_01.gps_right_time =0;
+	Garmin_01.status = 0;
 
+
+  /* Construct BIOS Objects */
     Task_Params WriteSD_taskParams;
     Task_Params Uart_taskParams;
-
 
     /* Call board init functions */
     Board_initGeneral();
