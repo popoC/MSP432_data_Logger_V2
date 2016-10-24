@@ -105,7 +105,10 @@ hptime_t fatfs_write_Time = 0;
 //-  adc 1sec = 100 sample * 3Byte = 300Bytes
 
 FIL src;
-int fileSize = 60/10; //--- 60 sec 1 file
+//int fileSize = 60; //--- 60 sec 1 file
+int fileSize = 600; //--- 600 sec 1 file
+
+
 int adc_counter = 0;
 
 int start_loggering = 0; //-- start REC
@@ -123,7 +126,7 @@ int checkGps = 0;
 hptime_t gps_time = 0;
 hptime_t gps_time2 = 0;
 hptime_t time_offset_now;
-hptime_t time_offset_first;
+hptime_t time_offset_first = 0;
 
 char GPS_Time_String[]  = "2000/01/01 00:00:00.000000";
 
@@ -143,7 +146,7 @@ hptime_t Get_Logger_Time(){
 
 	now_t = NOW_Time +(long int)time_drift;			  //  0.1ms  (0-10000)
 
-	//now_t = now_t + time_offset_first;
+	now_t = now_t - time_offset_first;
 
 
 	return(now_t);
@@ -176,9 +179,12 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
 
         while(start_loggering){
        		/* Open file for writing */
-    	    sprintf(inputfile,"%05ld.vvt",file_sn);
+    	    sprintf(inputfile,"%05ld.txt",file_sn);
 
-    	    fresult = f_open(&src, inputfile, FA_CREATE_NEW|FA_WRITE);
+    	    //fresult = f_open(&src, inputfile, FA_CREATE_NEW|FA_WRITE);      //     開新檔若存在，否則失敗
+    	    // FA_OPEN_ALWAYS																			//    若檔案存在打開，否則創新檔
+    	    fresult = f_open(&src, inputfile, FA_CREATE_ALWAYS|FA_WRITE);  //--  開新檔案，若存在舊檔則覆蓋
+
     	    f_sync(&src);
 
     	    fatfs_write_Time = Get_Logger_Time();
@@ -191,15 +197,12 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
 
            			while(!databuuer_is_Full){
            				Task_sleep((UInt)arg0);
+           				if(start_loggering==0)break;
            			}
-
-
 
            		//	GPIO_write(Board_LED2, Board_LED_ON);
 
            			f_write(&src, textarray, DATA_BUF_SIZE, &bytesWritten);
-
-
            			databuuer_is_Full = 0;
 
            	//		GPIO_write(Board_LED2, Board_LED_OFF);
@@ -211,6 +214,7 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
         		/* Reset the internal file pointer */	//		f_lseek(&src, 0);
            	}
            	else {
+           		break;
            	  //	System_printf("Using existing copy of \"%s\"\n", inputfile);
            	}
 
@@ -219,6 +223,7 @@ Void task_WriteSD_Fxn(UArg arg0, UArg arg1)
     SDSPI_close(sdspiHandle);    /* Stopping the SDCard */
     error_code = 8;
 
+    Logger_status = 3;
 
     //BIOS_exit(0);
 }
@@ -336,16 +341,16 @@ void hwi_GetSEAScanPPS_Fxn(unsigned int index){
 //----------------------------------------------------------------------------------------
 void hwi_GetGPS_PPS_Fxn(unsigned int index){
 
-	gps_time = Get_Logger_Time();
-	//gps_time = ms_timestr2hptime(GPS_Time_String);	//GPIO_toggle(Board_LED0);
-
-	time_offset_now = gps_time - gps_time2;
-
 	if(first_GPS_string==1){
-		time_offset_first = gps_time - gps_time2;
 		NOW_Time = gps_time2;
+		time_offset_first = Get_Logger_Time() - gps_time2;
 		first_GPS_string = 2;  //--  校正完成
-
+		Logger_status = 1;
+	}
+	else{
+		gps_time = Get_Logger_Time();
+		//gps_time = ms_timestr2hptime(GPS_Time_String);	//GPIO_toggle(Board_LED0);
+		time_offset_now = gps_time - gps_time2;
 	}
 }
 //----------------------------------------------------------------------------------------
@@ -374,7 +379,6 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 
     int print_i;
 
-
     UART_Handle uart2;
     UART_Params uartParams2;
     UART_Params_init(&uartParams2);
@@ -387,8 +391,6 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
     uart2 = UART_open(Board_UART1, &uartParams2);  //-- P1.2 P1.3   Board_UART1 = P3.2 P3.3
    // if (uart2 == NULL)System_abort("Error opening the UART 1");
 
-
-
 	while(1){
 	 Task_sleep((UInt)arg0);
 	 if(outPUT_mms==1){
@@ -396,7 +398,11 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 
 		 if(Garmin_01.status ==1){
 			 //sprintf(printbuffer,"GPS = %s , %s ,%s ,%lld, %lld \r\n", Gps_Date,Gps_Time,Gps_Staus,gps_time/100,gps_time2/100);
-			 sprintf(printbuffer,"GPS = %s , %s ,%lld, %lld, %lld , %d \r\n", Gps_Date,Gps_Time,gps_time/100,gps_time2/100,time_offset_now,Garmin_01.gps_right_time);
+			 //sprintf(printbuffer,"GPS = %s , %s ,%lld, %lld, %lld , %d ,%d\r\n", Gps_Date,Gps_Time,gps_time/100,gps_time2/100,time_offset_now,Garmin_01.gps_right_time,first_GPS_string);
+
+			 sprintf(printbuffer," %s ,%lld, %lld, %lld , %lld , %d ,%d\r\n", Gps_Time,gps_time/100,gps_time2/100,time_offset_now,time_offset_first,Garmin_01.gps_right_time,first_GPS_string);
+
+
 			 Garmin_01.status = 0;
 		 }
 		 else{
@@ -405,7 +411,17 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 		    if(Garmin_01.gps_right_time<-3)Garmin_01.gps_right_time=0;
 
 		 }
-		 UART_write(uart, &printbuffer, strlen(printbuffer));
+
+		 if(start_loggering==1){
+			 if(Garmin_01.checkGps){
+				 sprintf(printbuffer," %s ,%lld, %lld,\r\n", Gps_Time,time_offset_now,time_offset_first);
+			 	 UART_write(uart, &printbuffer, strlen(printbuffer));
+			 	Garmin_01.checkGps=0;
+			 }
+		 }
+		 else{
+			 UART_write(uart, &printbuffer, strlen(printbuffer));
+		 }
 
 
 		if(get_print==1){
@@ -421,9 +437,14 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
 	   if(UART_read(uart, &input, 1)>0){
 	        if( input  == 's'){
 	        		GPIO_write(Board_LED0, Board_LED_ON);
+	        		Logger_status = 2;
+	        		start_loggering = 1;
+	        		GPIO_write(Board_LED2, Board_LED_OFF);
 	        }
 	        if( input  == 'e'){
 	        		GPIO_write(Board_LED0, Board_LED_OFF);
+	        		start_loggering = 0;
+
 	        }
 	   }
 
@@ -454,10 +475,11 @@ void task_Uart_Fxn(UArg arg0, UArg arg1){
             	   		   	   	   gps_time2 = ms_timestr2hptime(GPS_Time_String);
 
             	   		   	   	   Garmin_01.gps_right_time++;
+            	   		   	       Garmin_01.checkGps=1;
 
             	   		   	   	   if(Garmin_01.gps_right_time>5){
             	   		   	   		   	   Garmin_01.gps_right_time = 1;
-            	   		   	   		   	   first_GPS_string = 1;
+            	   		   	   		       if(Logger_status==0){  first_GPS_string = 1; }
             	   		   	   	   }
             	   	   	   }
                    	   }
